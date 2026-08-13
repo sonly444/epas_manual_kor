@@ -1,0 +1,12 @@
+[SYNC RUN] 2026-08-13  9:32:00.16 
+commit d591c36783951f0b7b2e460818182fafe15ad354
+Author: sonly444 <sonly444@naver.com>
+Date:   Thu Aug 13 09:31:25 2026 +0900
+
+    Auto sync: 2026-08-13  9:31:24.84
+
+ ...Oracle Compatible) \352\260\234\354\232\224.md" |  2 +-
+ git_auto_push.bat                                  | 50 +++++++++++++++++
+ git_auto_push.bat.bak                              | 64 ++++++++++++++++++++++
+ 3 files changed, 115 insertions(+), 1 deletion(-)
+--------------------------------------------------- 
