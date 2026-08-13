@@ -1,0 +1,64 @@
+@echo off
+chcp 65001 > nul
+title Git 1시간 자동 동기화 스크립트
+
+cd /d "%~dp0"
+
+if not exist ".git" (
+    echo [ERROR] Git repository (.git) not found!
+    pause
+    exit /b
+)
+
+set LOG_FILE=git_auto_push.log
+
+echo ===================================================
+echo  Git 1시간 자동 동기화를 시작합니다.
+echo  현재 경로: %CD%
+echo  로그 파일: %LOG_FILE%
+echo  이 창을 닫지 말고 최소화해 두세요.
+echo ===================================================
+echo.
+
+:loop
+cd /d "%~dp0"
+
+echo [%date% %time%] 변경 사항 확인 중...
+
+git add .
+
+git status --porcelain > status_temp.txt
+for %%A in (status_temp.txt) do set FILE_SIZE=%%~zA
+del status_temp.txt
+
+if %FILE_SIZE% GTR 0 (
+    echo [%date% %time%] 변경 사항 감지! 커밋 및 푸시를 진행합니다.
+    echo.
+
+    git commit -m "Auto sync: %date% %time%"
+    git push origin main
+
+    echo.
+    echo ================= 최근 커밋 히스토리 =================
+    git log -n 3 --oneline --graph --decorate
+    echo ======================================================
+    echo.
+
+    echo [SYNC SUCCESS] %date% %time% >> "%LOG_FILE%"
+    echo --------------------------------------------------- >> "%LOG_FILE%"
+    git log -1 --stat >> "%LOG_FILE%"
+    echo =================================================== >> "%LOG_FILE%"
+    echo. >> "%LOG_FILE%"
+
+    echo [%date% %time%] %LOG_FILE% 파일에 로그가 기록되었습니다.
+) else (
+    echo [%date% %time%] 변경된 파일이 없습니다.
+)
+
+echo.
+echo [%date% %time%] 다음 동기화까지 1시간(3600초) 대기합니다...
+echo ---------------------------------------------------
+
+timeout /t 3600 /nobreak > nul
+
+goto loop
