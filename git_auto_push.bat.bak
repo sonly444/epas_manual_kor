@@ -2,19 +2,13 @@
 chcp 65001 > nul
 title Git 1시간 자동 동기화 스크립트
 
+:: 작업 디렉토리 이동
 cd /d "%~dp0"
-
-if not exist ".git" (
-    echo [ERROR] Git repository (.git) not found!
-    pause
-    exit /b
-)
-
 set LOG_FILE=git_auto_push.log
 
 echo ===================================================
 echo  Git 1시간 자동 동기화를 시작합니다.
-echo  현재 경로: %CD%
+echo  작업 경로: %CD%
 echo  로그 파일: %LOG_FILE%
 echo  이 창을 닫지 말고 최소화해 두세요.
 echo ===================================================
@@ -23,42 +17,49 @@ echo.
 :loop
 cd /d "%~dp0"
 
-echo [%date% %time%] 변경 사항 확인 중...
+:: 날짜/시간 변수 정규화 (YYYY-MM-DD HH:MM:SS)
+set CURRENT_DATE=%date:~0,10%
+set CURRENT_TIME=%time:~0,8%
+set TIMESTAMP=%CURRENT_DATE% %CURRENT_TIME%
 
+echo [%TIMESTAMP%] [STEP 1/4] 변경 사항 확인 및 추가 (git add)...
 git add .
 
-git status --porcelain > status_temp.txt
-for %%A in (status_temp.txt) do set FILE_SIZE=%%~zA
-del status_temp.txt
-
-if %FILE_SIZE% GTR 0 (
-    echo [%date% %time%] 변경 사항 감지! 커밋 및 푸시를 진행합니다.
-    echo.
-
-    git commit -m "Auto sync: %date% %time%"
-    git push origin main
-
-    echo.
-    echo ================= 최근 커밋 히스토리 =================
-    git log -n 3 --oneline --graph --decorate
-    echo ======================================================
-    echo.
-
-    echo [SYNC SUCCESS] %date% %time% >> "%LOG_FILE%"
-    echo --------------------------------------------------- >> "%LOG_FILE%"
-    git log -1 --stat >> "%LOG_FILE%"
-    echo =================================================== >> "%LOG_FILE%"
-    echo. >> "%LOG_FILE%"
-
-    echo [%date% %time%] %LOG_FILE% 파일에 로그가 기록되었습니다.
+:: 변경사항 존재 여부 체크
+git diff-index --quiet HEAD --
+if %errorlevel% neq 0 (
+    echo [%TIMESTAMP%] [STEP 2/4] 로컬 커밋 실행...
+    git commit -m "Auto sync: %TIMESTAMP%"
 ) else (
-    echo [%date% %time%] 변경된 파일이 없습니다.
+    echo [%TIMESTAMP%] [STEP 2/4] 변경된 파일이 없어 커밋을 건너뜁니다.
+)
+
+echo [%TIMESTAMP%] [STEP 3/4] 원격 변경사항 가져오기 (git pull --rebase)...
+git pull origin main --rebase
+
+echo [%TIMESTAMP%] [STEP 4/4] 원격 저장소로 푸시 (git push)...
+git push origin main
+if %errorlevel% neq 0 (
+    echo [%TIMESTAMP%] [ERROR] Push 실패! 코드 충돌이 발생했거나 네트워크/인증 문제입니다. >> "%LOG_FILE%"
+    echo [WARN] Push에 실패했습니다. 다음 주기에 재시도합니다.
+) else (
+    echo [%TIMESTAMP%] [SUCCESS] 정상적으로 Push 완료되었습니다.
 )
 
 echo.
-echo [%date% %time%] 다음 동기화까지 1시간(3600초) 대기합니다...
-echo ---------------------------------------------------
+echo [%TIMESTAMP%] 최근 커밋 기록 확인...
+git log -n 3 --oneline --graph --decorate
+echo.
+
+:: 로그 기록
+echo [SYNC RUN] %TIMESTAMP% >> "%LOG_FILE%"
+git log -1 --stat >> "%LOG_FILE%" 2>nul
+echo --------------------------------------------------- >> "%LOG_FILE%"
+
+echo.
+echo [%TIMESTAMP%] 동기화 시도 완료. 1시간(3600초) 대기합니다...
+echo ===================================================
+echo.
 
 timeout /t 3600 /nobreak > nul
-
 goto loop
