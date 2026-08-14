@@ -34,7 +34,7 @@ if %errorlevel% equ 0 goto NO_CHANGES
 
 echo [%TIMESTAMP%] [STEP 3/4] 로컬 커밋 및 원격 푸시 실행...
 git commit -m "Auto sync: %TIMESTAMP%"
-git push origin main
+git push origin main --force
 if errorlevel 1 (
     echo [%TIMESTAMP%] [ERROR] Push 실패! 다음 주기에 재시도합니다. >> "%LOG_FILE%"
     echo [WARN] Push에 실패했습니다. 다음 주기에 재시도합니다.
