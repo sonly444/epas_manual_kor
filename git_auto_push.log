@@ -303,3 +303,22 @@ Date:   Fri Aug 14 09:38:18 2026 +0900
  git_auto_push.log | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 --------------------------------------------------- 
+[SYNC RUN] 2026-08-14 14:37:12 
+commit ab36cfef867e7e573b4be24efeeb8a9ff3563b98
+Author: sonly444 <sonly444@naver.com>
+Date:   Fri Aug 14 14:37:06 2026 +0900
+
+    Auto sync: 2026-08-14 10:38:22
+
+ .../14.4.3.12_DBMS_PRIVILEGE_CAPTURE.md"           | 18 +++++-----
+ .../14.4.3.5.6_RANDOMINTEGER.md"                   |  2 +-
+ .../14.4.3.5.7_RANDOMNUMBER.md"                    |  2 +-
+ .../14.4.4.1.33_DBA_CONSTRAINTS.md"                | 41 +++++++++++++---------
+ .../14.4.4.1.3_ALL_CONSTRAINTS.md"                 | 41 +++++++++++++---------
+ .../14.4.4.1.67_USER_CONSTRAINTS.md"               | 41 +++++++++++++---------
+ ..._ALTER_USER_ROLE_PROFILE_MANAGEMENT_CLAUSES.md" | 11 ++----
+ .../14.4.5.27_CREATE_INDEX.md"                     |  5 +--
+ .../14.4.5.6_ALTER_PUBLIC_DATABASE_LINK.md"        |  6 +++-
+ git_auto_push.log                                  | 10 ++++++
+ 10 files changed, 106 insertions(+), 71 deletions(-)
+--------------------------------------------------- 
