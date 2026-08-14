@@ -17,37 +17,35 @@ echo.
 :loop
 cd /d "%~dp0"
 
-:: 날짜/시간 변수 정규화 (YYYY-MM-DD HH:MM:SS)
+:: 날짜/시간 변수 정규화
 set CURRENT_DATE=%date:~0,10%
 set CURRENT_TIME=%time:~0,8%
 set TIMESTAMP=%CURRENT_DATE% %CURRENT_TIME%
 
-echo [%TIMESTAMP%] [STEP 1/4] 변경 사항 확인 및 추가 (git add)...
+echo [%TIMESTAMP%] [STEP 1/4] 원격 최신 변경사항 확인 (git pull)...
+git pull origin main --no-rebase > nul 2>&1
+
+echo [%TIMESTAMP%] [STEP 2/4] 변경 사항 확인 및 추가 (git add)...
 git add .
 
 :: 변경사항 존재 여부 체크
 git diff-index --quiet HEAD --
 if %errorlevel% neq 0 (
-    echo [%TIMESTAMP%] [STEP 2/4] 로컬 커밋 실행...
+    echo [%TIMESTAMP%] [STEP 3/4] 로컬 커밋 및 원격 푸시 실행...
     git commit -m "Auto sync: %TIMESTAMP%"
+    git push origin main
+    if %errorlevel% neq 0 (
+        echo [%TIMESTAMP%] [ERROR] Push 실패! 다음 주기에 재시도합니다. >> "%LOG_FILE%"
+        echo [WARN] Push에 실패했습니다. 다음 주기에 재시도합니다.
+    ) else (
+        echo [%TIMESTAMP%] [SUCCESS] 정상적으로 Push 완료되었습니다.
+    )
 ) else (
-    echo [%TIMESTAMP%] [STEP 2/4] 변경된 파일이 없어 커밋을 건너뜁니다.
-)
-
-echo [%TIMESTAMP%] [STEP 3/4] 원격 변경사항 가져오기 (git pull --rebase)...
-git pull origin main --rebase
-
-echo [%TIMESTAMP%] [STEP 4/4] 원격 저장소로 푸시 (git push)...
-git push origin main
-if %errorlevel% neq 0 (
-    echo [%TIMESTAMP%] [ERROR] Push 실패! 코드 충돌이 발생했거나 네트워크/인증 문제입니다. >> "%LOG_FILE%"
-    echo [WARN] Push에 실패했습니다. 다음 주기에 재시도합니다.
-) else (
-    echo [%TIMESTAMP%] [SUCCESS] 정상적으로 Push 완료되었습니다.
+    echo [%TIMESTAMP%] [STEP 3/4] 변경된 파일이 없어 커밋을 건너뜁니다.
 )
 
 echo.
-echo [%TIMESTAMP%] 최근 커밋 기록 확인...
+echo [%TIMESTAMP%] [STEP 4/4] 최근 커밋 기록 확인...
 git log -n 3 --oneline --graph --decorate
 echo.
 
