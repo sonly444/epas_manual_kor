@@ -2,19 +2,13 @@
 chcp 65001 > nul
 title Git 1시간 자동 동기화 스크립트
 
-echo [STEP 1/5] 작업 디렉토리로 이동...
+:: 작업 디렉토리 이동
 cd /d "%~dp0"
-echo 현재 위치: %CD%
-echo.
-
-echo [STEP 2/5] Git 저장소 확인...
-git status
-echo.
-
 set LOG_FILE=git_auto_push.log
 
 echo ===================================================
 echo  Git 1시간 자동 동기화를 시작합니다.
+echo  작업 경로: %CD%
 echo  로그 파일: %LOG_FILE%
 echo  이 창을 닫지 말고 최소화해 두세요.
 echo ===================================================
@@ -23,28 +17,48 @@ echo.
 :loop
 cd /d "%~dp0"
 
-echo [%date% %time%] [STEP 3/5] 변경 사항 추가 (git add)...
+:: 날짜/시간 변수 정규화 (YYYY-MM-DD HH:MM:SS)
+set CURRENT_DATE=%date:~0,10%
+set CURRENT_TIME=%time:~0,8%
+set TIMESTAMP=%CURRENT_DATE% %CURRENT_TIME%
+
+echo [%TIMESTAMP%] [STEP 1/4] 원격 동기화 확인 (git pull --rebase)...
+git pull origin main --rebase > nul 2>&1
+
+echo [%TIMESTAMP%] [STEP 2/4] 변경 사항 확인 및 추가 (git add)...
 git add .
-echo.
 
-echo [%date% %time%] [STEP 4/5] 커밋 및 푸시 실행...
-git commit -m "Auto sync: %date% %time%"
-git push origin main
-echo.
+:: 변경사항이 있는지 확인 (git diff-index)
+git diff-index --quiet HEAD --
+if %errorlevel% neq 0 (
+    echo [%TIMESTAMP%] [STEP 3/4] 커밋 및 푸시 실행...
+    git commit -m "Auto sync: %TIMESTAMP%"
+    
+    git push origin main
+    if %errorlevel% neq 0 (
+        echo [%TIMESTAMP%] [ERROR] Push 실패! 원격 충돌 가능성이 있습니다. >> "%LOG_FILE%"
+        echo [WARN] Push에 실패했습니다. 다음 주기에 재시도합니다.
+    ) else (
+        echo [%TIMESTAMP%] [SUCCESS] 정상적으로 Push 완료되었습니다.
+    )
+) else (
+    echo [%TIMESTAMP%] [STEP 3/4] 변경된 파일이 없어 커밋을 건너뜁니다.
+)
 
-echo [%date% %time%] [STEP 5/5] 최근 커밋 기록 및 로그 작성...
+echo.
+echo [%TIMESTAMP%] [STEP 4/4] 최근 커밋 기록 확인...
 git log -n 3 --oneline --graph --decorate
 echo.
 
-echo [SYNC RUN] %date% %time% >> "%LOG_FILE%"
+:: 로그 기록
+echo [SYNC RUN] %TIMESTAMP% >> "%LOG_FILE%"
 git log -1 --stat >> "%LOG_FILE%" 2>nul
 echo --------------------------------------------------- >> "%LOG_FILE%"
 
 echo.
-echo [%date% %time%] 동기화 시도 완료. 1시간(3600초) 대기합니다...
+echo [%TIMESTAMP%] 동기화 시도 완료. 1시간(3600초) 대기합니다...
 echo ===================================================
 echo.
 
 timeout /t 3600 /nobreak > nul
-
 goto loop
