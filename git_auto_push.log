@@ -1327,3 +1327,15 @@ Date:   Tue Aug 18 14:09:26 2026 +0900
  git_auto_push.log | 10 ++++++++++
  1 file changed, 10 insertions(+)
 --------------------------------------------------- 
+[SYNC RUN] 2026-08-18 15:09:30 
+commit 297e7a45bb734500f3c17a41be34a546e3342faf
+Author: sonly444 <sonly444@naver.com>
+Date:   Tue Aug 18 15:09:32 2026 +0900
+
+    Auto sync: 2026-08-18 15:09:30
+
+ .../14.4.2.6_ALTER_TABLE_EXCHANGE_PARTITION.md"    |  2 +-
+ ...243\271\353\213\244\353\243\250\352\270\260.md" | 47 ++++++++++++++++++++--
+ git_auto_push.log                                  | 10 +++++
+ 3 files changed, 54 insertions(+), 5 deletions(-)
+--------------------------------------------------- 
