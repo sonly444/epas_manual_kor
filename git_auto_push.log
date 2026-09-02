@@ -3919,3 +3919,25 @@ Date:   Wed Sep 2 17:33:48 2026 +0900
  git_auto_push.log                                  | 10 ++++++
  21 files changed, 203 insertions(+), 194 deletions(-)
 --------------------------------------------------- 
+[SYNC RUN] 2026-09-02 18:33:51 
+commit c3b945f71d8f15549620232baa72a7c514e8b276
+Author: sonly444 <sonly444@naver.com>
+Date:   Wed Sep 2 18:33:52 2026 +0900
+
+    Auto sync: 2026-09-02 18:33:51
+
+ ...267\270 \353\267\260 (Oracle catalog views).md" |  2 +-
+ .../14.4.4.1.11_ALL_OBJECTS.md"                    |  2 +-
+ .../14.4.4.1.33_DBA_CONSTRAINTS.md"                | 32 +++++++++++-----------
+ .../14.4.4.1.3_ALL_CONSTRAINTS.md"                 | 32 +++++++++++-----------
+ .../14.4.4.1.41_DBA_OBJECTS.md"                    |  2 +-
+ .../14.4.4.1.45_DBA_PRIV_CAPTURE.md"               | 24 ++++++++--------
+ .../14.4.4.1.67_USER_CONSTRAINTS.md"               | 30 ++++++++++----------
+ .../14.4.4.1.73_USER_OBJECTS.md"                   |  2 +-
+ .../8.1.2.1.2_work_mem.md"                         |  4 +--
+ .../8.1.2.1.3_maintenance_work_mem.md"             |  2 +-
+ .../8.1.2.1.4_wal_buffers.md"                      |  2 +-
+ .../9.4_sslutils.md"                               |  2 +-
+ git_auto_push.log                                  | 30 ++++++++++++++++++++
+ 13 files changed, 98 insertions(+), 68 deletions(-)
+--------------------------------------------------- 
