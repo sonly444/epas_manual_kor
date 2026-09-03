@@ -4115,3 +4115,24 @@ Date:   Thu Sep 3 11:35:05 2026 +0900
  git_auto_push.log                                              | 10 ++++++++++
  5 files changed, 14 insertions(+), 4 deletions(-)
 --------------------------------------------------- 
+[SYNC RUN] 2026-09-03 12:35:08 
+commit 7b977e6e7cfa0528dfb337ccbe27f305e588d9ff
+Author: sonly444 <sonly444@naver.com>
+Date:   Thu Sep 3 12:35:09 2026 +0900
+
+    Auto sync: 2026-09-03 12:35:08
+
+ .../14.1.2.11_XML\355\203\200\354\236\205.md"             | 15 +++++++++------
+ ...5_\355\203\200\354\236\205\354\275\224\353\223\234.md" |  1 -
+ .../14.4.4.1.29_ALL_VIEW_COLUMNS.md"                      |  2 +-
+ .../14.4.4.1.55_DBA_TAB_COLUMNS.md"                       |  2 +-
+ .../14.4.4.1.64a_DBA_VIEW_COLUMNS.md"                     |  2 +-
+ .../14.4.4.1.91_USER_VIEW_COLUMNS.md"                     |  2 +-
+ ....4.5.18_ALTER_USER_ROLE_PROFILE_MANAGEMENT_CLAUSES.md" |  2 --
+ ...4.5.45_CREATE_USER_ROLE_PROFILE_MANAGEMENT_CLAUSES.md" |  8 --------
+ ...04\353\241\234\355\225\204\354\227\260\352\262\260.md" |  3 ---
+ ...64\352\263\204\354\240\225\355\225\264\354\240\234.md" | 13 -------------
+ ...60\354\227\255\355\225\240\354\203\235\354\204\261.md" |  3 ---
+ git_auto_push.log                                         | 14 ++++++++++++++
+ 12 files changed, 27 insertions(+), 40 deletions(-)
+--------------------------------------------------- 
